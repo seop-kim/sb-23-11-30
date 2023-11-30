@@ -5,6 +5,7 @@ import com.ll.sb231130.domain.article.article.repository.ArticleRepository;
 import com.ll.sb231130.domain.member.member.entity.Member;
 import com.ll.sb231130.global.rsData.RsData;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,5 +34,13 @@ public class ArticleService {
 
     public Optional<Article> findById(Long id) {
         return articleRepository.findById(id);
+    }
+
+    public List<Article> findAll() {
+        return articleRepository.findAll();
+    }
+
+    public List<Article> findAllByOrderByIdDesc() {
+        return articleRepository.findAllByOrderByIdDesc();
     }
 }
