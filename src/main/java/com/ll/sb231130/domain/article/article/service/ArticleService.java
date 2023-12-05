@@ -43,4 +43,9 @@ public class ArticleService {
     public List<Article> findAllByOrderByIdDesc() {
         return articleRepository.findAllByOrderByIdDesc();
     }
+
+    @Transactional
+    public void deleteById(long id) {
+        articleRepository.deleteById(id);
+    }
 }
