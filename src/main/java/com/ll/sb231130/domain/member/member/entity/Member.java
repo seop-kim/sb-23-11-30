@@ -2,13 +2,12 @@ package com.ll.sb231130.domain.member.member.entity;
 
 import com.ll.sb231130.global.jpa.baseEntity.BaseEntity;
 import jakarta.persistence.Entity;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -19,13 +18,24 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseEntity {
     private String username;
-
     private String password;
-
     private String email;
+    private String nickname;
 
-    private String nickName;
     public String getName() {
-        return nickName;
+        return nickname;
+    }
+
+    @SuppressWarnings("JpaAttributeTypeInspection")
+    public List<? extends GrantedAuthority> getAuthorities() {
+        return getAuthoritiesAsStrList()
+                .stream()
+                .map(SimpleGrantedAuthority::new)
+                .toList();
+    }
+
+    @SuppressWarnings("JpaAttributeTypeInspection")
+    public List<String> getAuthoritiesAsStrList() {
+        return List.of("ROLE_MEMBER");
     }
 }

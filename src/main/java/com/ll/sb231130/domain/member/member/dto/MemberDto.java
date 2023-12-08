@@ -17,6 +17,6 @@ public class MemberDto {
         this.createDate = member.getCreateDate();
         this.modifyDate = member.getModifyDate();
         this.username = member.getUsername();
-        this.nickname = member.getNickName();
+        this.nickname = member.getNickname();
     }
 }
