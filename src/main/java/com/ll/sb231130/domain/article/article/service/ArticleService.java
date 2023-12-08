@@ -48,4 +48,10 @@ public class ArticleService {
     public void deleteById(long id) {
         articleRepository.deleteById(id);
     }
+
+    @Transactional
+    public void modify(Article article, String title, String body) {
+        article.setTitle(title);
+        article.setBody(body);
+    }
 }

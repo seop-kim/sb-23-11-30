@@ -1,8 +1,7 @@
 package com.ll.sb231130.domain.article.article.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ll.sb231130.domain.member.member.entity.Member;
-import com.ll.sb231130.global.jpa.BaseEntity;
+import com.ll.sb231130.global.jpa.baseEntity.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;

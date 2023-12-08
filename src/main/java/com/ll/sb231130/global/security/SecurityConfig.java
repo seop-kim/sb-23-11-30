@@ -21,6 +21,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(
                         authorizeHttpRequests -> authorizeHttpRequests
+
                                 .requestMatchers(
                                         PathRequest.toStaticResources().atCommonLocations(),
                                         new AntPathRequestMatcher("/resources/**"),
@@ -33,6 +34,8 @@ public class SecurityConfig {
                                 .hasRole("ADMIN")
                                 .anyRequest()
                                 .permitAll()
+
+
                 )
                 .headers(
                         headers -> headers

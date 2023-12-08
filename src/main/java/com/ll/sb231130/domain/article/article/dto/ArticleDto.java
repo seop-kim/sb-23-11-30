@@ -14,7 +14,6 @@ public class ArticleDto {
     private LocalDateTime modifyDate;
     private Long authorId;
     private final String authorName;
-    private Member author;
     private String title;
     private String body;
 

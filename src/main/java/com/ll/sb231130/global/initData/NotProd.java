@@ -34,9 +34,9 @@ public class NotProd {
         if (memberService.count() > 0) {
             return;
         }
-        Member member1 = memberService.join("admin", "1234", "관리자", "admin@test.com").getData();
-        Member member2 = memberService.join("user1", "1234", "관리자", "user1@test.com").getData();
-        Member member3 = memberService.join("user2", "1234", "관리자", "user2@test.com").getData();
+        Member member1 = memberService.join("admin", "1234", "admin@test.com", "admin").getData();
+        Member member2 = memberService.join("user1", "1234", "user1@test.com", "user1").getData();
+        Member member3 = memberService.join("user2", "1234", "user2@test.com", "user2").getData();
 
         Article article1 = articleService.write(member1, "제목1", "내용1").getData();
         Article article2 = articleService.write(member1, "제목2", "내용2").getData();

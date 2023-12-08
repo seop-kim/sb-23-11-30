@@ -1,4 +1,4 @@
-package com.ll.sb231130.global.jpa;
+package com.ll.sb231130.global.jpa.baseEntity;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;

@@ -8,7 +8,7 @@ import lombok.Getter;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class RsData<T> {
 
-    private final String resultCOde;
+    private final String resultCode;
     private final String msg;
     private final T data;
     private final int statusCode;
@@ -24,5 +24,13 @@ public class RsData<T> {
 
     public boolean isFail() {
         return !isSuccess();
+    }
+
+    public <T> RsData<T> of(T data) {
+        return RsData.of(resultCode, msg, data);
+    }
+
+    public static RsData<?> of(String resultCode, String msg) {
+        return of(resultCode, msg, null);
     }
 }
