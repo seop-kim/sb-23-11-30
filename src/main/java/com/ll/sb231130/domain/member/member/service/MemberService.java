@@ -3,6 +3,7 @@ package com.ll.sb231130.domain.member.member.service;
 import com.ll.sb231130.domain.member.member.entity.Member;
 import com.ll.sb231130.domain.member.member.repository.MemberRepository;
 import com.ll.sb231130.global.rsData.RsData;
+import com.ll.sb231130.global.security.SecurityUser;
 import com.ll.sb231130.global.util.jwt.JwtUtil;
 import io.jsonwebtoken.Claims;
 import java.time.LocalDateTime;
@@ -52,18 +53,21 @@ public class MemberService {
         return memberRepository.findByUsername(username);
     }
 
-    public User getUserFromApiKey(String apiKey) {
+    public SecurityUser getUserFromApiKey(String apiKey) {
         Claims claims = JwtUtil.decode(apiKey);
 
         Map<String, Object> data = (Map<String, Object>) claims.get("data");
-        String id = (String) data.get("id");
+        long id = Long.parseLong((String) data.get("id"));
+        String username = (String) data.get("username");
+
         List<? extends GrantedAuthority> authorities = ((List<String>) data.get("authorities"))
                 .stream()
                 .map(SimpleGrantedAuthority::new)
                 .toList();
 
-        return new User(
+        return new SecurityUser(
                 id,
+                username,
                 "",
                 authorities
         );
@@ -81,5 +85,10 @@ public class MemberService {
         }
 
         return RsData.of("200", "로그인 성공", memberOp.get());
+    }
+
+    @Transactional
+    public void setRefreshToken(Member member, String refreshToken) {
+        member.setRefreshToken(refreshToken);
     }
 }

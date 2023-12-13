@@ -1,13 +1,18 @@
 package com.ll.sb231130.global.rq;
 
 import com.ll.sb231130.domain.member.member.entity.Member;
-import com.ll.sb231130.domain.member.member.service.MemberService;
+import com.ll.sb231130.global.security.SecurityUser;
+import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 
@@ -17,18 +22,43 @@ import org.springframework.web.context.annotation.RequestScope;
 public class Rq {
     private final HttpServletRequest request;
     private final HttpServletResponse response;
-    private final MemberService memberService;
     private final EntityManager entityManager;
     private Member member;
+    private SecurityUser securityUser;
+    public boolean isAdmin() {
+        if (isLogout()) return false;
+
+        return getSecurityUser()
+                .getAuthorities()
+                .stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
+    }
+
+    public boolean isLogin() {
+        return getSecurityUser() != null;
+    }
+
+    public boolean isLogout() {
+        return !isLogin();
+    }
+
+    public SecurityUser getSecurityUser() {
+        if (securityUser == null) {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication == null) return null;
+            Object principal = authentication.getPrincipal();
+            if (principal == null) return null;
+            securityUser = (SecurityUser) principal;
+        }
+
+        return securityUser;
+    }
 
     public Member getMember() {
-        if (member == null) {
-            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            long memberId = Long.parseLong(user.getUsername());
+        if (isLogout()) return null;
 
-            // new Member(memberId)랑 같다. id만 존재하는 Member를 생성한 것이다.
-            // id 값 밖에 없지만 만약 username 을 요청하게 되면 이때 sql이 생성되어 id를 통해 쿼리를 생성하여 username을 가져온다.
-            member = entityManager.getReference(Member.class, memberId);
+        if (member == null) {
+            member = entityManager.find(Member.class, getSecurityUser().getId());
         }
 
         return member;
@@ -43,6 +73,14 @@ public class Rq {
 
         return value;
     }
-}
 
-// facade
+    public void setAuthentication(SecurityUser user) {
+        Authentication auth = new UsernamePasswordAuthenticationToken(
+                user,
+                user.getPassword(),
+                user.getAuthorities()
+        );
+
+        SecurityContextHolder.getContext().setAuthentication(auth);
+    }
+}

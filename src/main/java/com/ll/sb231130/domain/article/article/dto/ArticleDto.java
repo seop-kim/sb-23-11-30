@@ -22,7 +22,7 @@ public class ArticleDto {
         this.createDate = article.getCreateDate();
         this.modifyDate = article.getModifyDate();
         this.authorId = article.getAuthor().getId();
-        this.authorName = null;
+        this.authorName = article.getAuthor().getName();
         this.title = article.getTitle();
         this.body = article.getBody();
     }

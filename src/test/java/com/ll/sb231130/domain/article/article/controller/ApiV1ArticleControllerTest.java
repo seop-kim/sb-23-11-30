@@ -1,8 +1,8 @@
 package com.ll.sb231130.domain.article.article.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import com.ll.sb231130.domain.article.article.entity.Article;
 import com.ll.sb231130.domain.article.article.service.ArticleService;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +15,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.matchesPattern;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.hamcrest.Matchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -33,12 +27,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ApiV1ArticleControllerTest {
     @Autowired
     private MockMvc mvc;
+    @Autowired
+    private ArticleService articleService;
 
     // 날짜 패턴 정규식
     private static final String DATE_PATTERN = "\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.?\\d{0,7}";
-
-    @Autowired
-    private ArticleService articleService;
 
     @Test
     @DisplayName("GET /api/v1/articles")
@@ -106,7 +99,7 @@ public class ApiV1ArticleControllerTest {
                 .andExpect(jsonPath("$.data.item.body", notNullValue()));
 
         Article article1 = articleService.findById(1L).orElse(null);
-        Assertions.assertThat(article1).isNull();
+        assertThat(article1).isNull();
     }
 
     @Test
